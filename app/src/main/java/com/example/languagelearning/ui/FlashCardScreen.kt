@@ -156,8 +156,6 @@ fun translateText(text: String, languageCode: String?) {
         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
             if (response.isSuccessful) {
                 Log.d("test", response.body()!!.string())
-
-                val jsonObject = JSONObject(response.body().toString())
                 // Handle data
 //                val translatedText = response.body()
 //                if (translatedText != null)
