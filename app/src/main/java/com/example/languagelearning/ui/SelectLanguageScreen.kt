@@ -15,18 +15,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+
+import com.example.languagelearning.data.DataSource
 
 @Composable
 fun SelectLanguageScreen(
     languageOptions: List<String>,
     flags: List<Int>,
-    onClick: () -> Unit = {}
+    navController: NavHostController
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
         items(languageOptions.size) {  index ->
+            val languageCode = DataSource.languageCodes[index]
+
             Image(
                 painter = painterResource(id = flags[index]),
                 contentDescription = null,
@@ -36,7 +41,7 @@ fun SelectLanguageScreen(
                     .padding(10.dp)
                     .fillMaxWidth()
                     .clickable(
-                        onClick = onClick
+                        onClick = { navController.navigate("FlashCard/${languageCode}") }
                     )
 
             )

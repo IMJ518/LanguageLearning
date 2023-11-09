@@ -36,11 +36,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
 import com.example.languagelearning.api.ApiService
 import com.example.languagelearning.api.TranslateRequest
 import com.example.languagelearning.api.TranslateResponse
 import com.example.languagelearning.ui.components.BtnPlay
+import com.example.languagelearning.ui.components.BtnBack
 
 import retrofit2.Call
 import retrofit2.Callback
@@ -52,16 +54,15 @@ var translation: String = ""
 @Composable
 fun FlashCardScreen(
     animalNames: List<String>,
-    animalPhotos: List<Int>
+    animalPhotos: List<Int>,
+    languageCode: String?,
+    navController: NavHostController
 ) {
     val pageCount = animalNames.size
     val pagerState = rememberPagerState()
 
     /**
      * A pager that scrolls horizontally
-     * @param pageCount The amount of pages this Pager will have
-     * @param state The state to control this pager
-     * @param key an unique key representing the item
      */
     HorizontalPager(
         pageCount = pageCount,
@@ -96,8 +97,8 @@ fun FlashCardScreen(
                     .fillMaxWidth()
                     .clickable {
                         expanded = !expanded
-                        if (expanded){
-                            translateText(animalNames[index])
+                        if (expanded) {
+                            translateText(animalNames[index], languageCode)
                         }
                     }
             )
@@ -140,12 +141,14 @@ fun FlashCardScreen(
             )
         }
     }
+
+    BtnBack(onClick = { navController.navigateUp() })
 }
 
 
-fun translateText(text: String) {
+fun translateText(text: String, languageCode: String?) {
     translation = ""
-    val request = TranslateRequest(q = text, source = "en", target = "pt")
+    val request = TranslateRequest(q = text, source = "en", target = languageCode)
 
     // Send asynchronous HTTP request using enqueue() method (for synchronous request, use execute())
     ApiService.instance.translate(request).enqueue(object : Callback<TranslateResponse> {
@@ -160,7 +163,7 @@ fun translateText(text: String) {
                 }
             } else {
                 // Handle error
-                Log.d("test", "no response")
+                Log.d("test", "no response $languageCode")
             }
         }
 

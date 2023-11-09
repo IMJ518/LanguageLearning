@@ -7,9 +7,11 @@ import com.example.languagelearning.ui.FlashCardScreen
 import androidx.compose.runtime.Composable
 
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 
 enum class Route {
     LanguageSelection,
@@ -28,14 +30,23 @@ fun LanguageLearningApp(
             SelectLanguageScreen(
                 languageOptions = DataSource.languageCodes,
                 flags = DataSource.flags,
-                onClick = { navController.navigate(Route.FlashCard.name) },
+                navController
             )
         }
 
-        composable(route = Route.FlashCard.name) {
+        composable(
+            route = "${Route.FlashCard.name}/{languageCode}",
+            arguments = listOf(
+                navArgument("languageCode"){
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
             FlashCardScreen(
                 animalNames = DataSource.animalNames,
                 animalPhotos = DataSource.animalPhotos,
+                languageCode = backStackEntry.arguments?.getString("languageCode"),
+                navController
             )
         }
     }
