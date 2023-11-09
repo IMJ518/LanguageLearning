@@ -9,11 +9,21 @@ object DataSource {
         "Lion",
         "Tiger",
     )
+
+    val foodNames = listOf(
+        "Banana",
+        "Apple"
+    )
+    val foodPhotos = listOf(
+        R.drawable.banana,
+        R.drawable.apple
+    )
+
     val animalPhotos = listOf(
         R.drawable.dog,
         R.drawable.cat,
         R.drawable.lion,
-        R.drawable.tiger,
+        R.drawable.tiger
     )
 
     val languageCodes = listOf(
@@ -23,5 +33,15 @@ object DataSource {
     val flags = listOf(
         R.drawable.pt,
         R.drawable.ko,
+    )
+
+    val categoryNames = listOf(
+        "Animals",
+        "Food"
+    )
+
+    val categoryPhotos = listOf(
+        R.drawable.animals,
+        R.drawable.food
     )
 }

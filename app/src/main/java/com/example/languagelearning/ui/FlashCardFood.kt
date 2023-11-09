@@ -48,18 +48,18 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-var translation: String = ""
+var foodTranslation: String = ""
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FlashCardScreen(
-    animalNames: List<String>,
-    animalPhotos: List<Int>,
+fun FlashCardFoodScreen(
+    foodNames: List<String>,
+    foodPhotos: List<Int>,
     languageCode: String?,
     categorySelected: String?,
     navController: NavHostController
 ) {
-    val pageCount = animalNames.size
+    val pageCount = foodNames.size
     val pagerState = rememberPagerState()
 
     /**
@@ -68,7 +68,7 @@ fun FlashCardScreen(
     HorizontalPager(
         pageCount = pageCount,
         state = pagerState,
-        key = { animalNames[it] }
+        key = { foodNames[it] }
     ) { index ->
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -77,7 +77,7 @@ fun FlashCardScreen(
             var expanded by remember { mutableStateOf(false) }
 
             Text(
-                text = animalNames[index],
+                text = foodNames[index],
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -88,7 +88,7 @@ fun FlashCardScreen(
             )
 
             Image(
-                painter = painterResource(id = animalPhotos[index]),
+                painter = painterResource(id = foodPhotos[index]),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -99,7 +99,7 @@ fun FlashCardScreen(
                     .clickable {
                         expanded = !expanded
                         if (expanded) {
-                            translateText(animalNames[index], languageCode)
+                            translateFoodText(foodNames[index], languageCode)
                         }
                     }
             )
@@ -108,7 +108,7 @@ fun FlashCardScreen(
                 Column(verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = translation,
+                        text = foodTranslation,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
                         style = TextStyle(
@@ -147,8 +147,8 @@ fun FlashCardScreen(
 }
 
 
-fun translateText(text: String, languageCode: String?) {
-    translation = ""
+fun translateFoodText(text: String, languageCode: String?) {
+    foodTranslation = ""
     val request = TranslateRequest(q = text, source = "en", target = languageCode)
 
     // Send asynchronous HTTP request using enqueue() method (for synchronous request, use execute())
@@ -159,8 +159,8 @@ fun translateText(text: String, languageCode: String?) {
                 val translatedText = response.body()?.translatedText
                 if (translatedText != null)
                 {
-                    translation = translatedText
-                    Log.d("test", translation) // print the translated text in logcat
+                    foodTranslation = translatedText
+                    Log.d("test", foodTranslation) // print the translated text in logcat
                 }
             } else {
                 // Handle error
