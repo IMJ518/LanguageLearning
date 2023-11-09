@@ -37,29 +37,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+
 import com.example.languagelearning.api.ApiService
-import com.example.languagelearning.ui.components.BtnBack
+import com.example.languagelearning.api.TranslateRequest
+import com.example.languagelearning.api.TranslateResponse
 import com.example.languagelearning.ui.components.BtnPlay
-import com.google.gson.JsonObject
-import okhttp3.ResponseBody
-import org.json.JSONObject
+import com.example.languagelearning.ui.components.BtnBack
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
-var translation: String = ""
+var foodTranslation: String = ""
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FlashCardScreen(
-    animalNames: List<String>,
-    animalPhotos: List<Int>,
+fun FlashCardFoodScreen(
+    foodNames: List<String>,
+    foodPhotos: List<Int>,
     languageCode: String?,
     categorySelected: String?,
     navController: NavHostController
 ) {
-    val pageCount = animalNames.size
+    val pageCount = foodNames.size
     val pagerState = rememberPagerState()
 
     /**
@@ -68,7 +68,7 @@ fun FlashCardScreen(
     HorizontalPager(
         pageCount = pageCount,
         state = pagerState,
-        key = { animalNames[it] }
+        key = { foodNames[it] }
     ) { index ->
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -77,7 +77,7 @@ fun FlashCardScreen(
             var expanded by remember { mutableStateOf(false) }
 
             Text(
-                text = animalNames[index],
+                text = foodNames[index],
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -88,7 +88,7 @@ fun FlashCardScreen(
             )
 
             Image(
-                painter = painterResource(id = animalPhotos[index]),
+                painter = painterResource(id = foodPhotos[index]),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -99,8 +99,7 @@ fun FlashCardScreen(
                     .clickable {
                         expanded = !expanded
                         if (expanded) {
-                            Log.d("test", "expanded")
-                            translateText(animalNames[index], languageCode)
+                            translateFoodText(foodNames[index], languageCode)
                         }
                     }
             )
@@ -109,7 +108,7 @@ fun FlashCardScreen(
                 Column(verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = translation,
+                        text = foodTranslation,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
                         style = TextStyle(
@@ -148,30 +147,28 @@ fun FlashCardScreen(
 }
 
 
-fun translateText(text: String, languageCode: String?) {
-    translation = ""
+fun translateFoodText(text: String, languageCode: String?) {
+    foodTranslation = ""
+    val request = TranslateRequest(q = text, source = "en", target = languageCode)
 
     // Send asynchronous HTTP request using enqueue() method (for synchronous request, use execute())
-    ApiService.instance.translate(q = text, langpair = "en|$languageCode").enqueue(object : Callback<ResponseBody> {
-        override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+    ApiService.instance.translate(request).enqueue(object : Callback<TranslateResponse> {
+        override fun onResponse(call: Call<TranslateResponse>, response: Response<TranslateResponse>) {
             if (response.isSuccessful) {
-                Log.d("test", response.body()!!.string())
-
-                val jsonObject = JSONObject(response.body().toString())
                 // Handle data
-//                val translatedText = response.body()
-//                if (translatedText != null)
-//                {
-//                    translation = translatedText
-//                    Log.d("test", translation) // print the translated text in logcat
-//                }
+                val translatedText = response.body()?.translatedText
+                if (translatedText != null)
+                {
+                    foodTranslation = translatedText
+                    Log.d("test", foodTranslation) // print the translated text in logcat
+                }
             } else {
                 // Handle error
                 Log.d("test", "no response $languageCode")
             }
         }
 
-        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+        override fun onFailure(call: Call<TranslateResponse>, t: Throwable) {
             // Handle failure of the request
             Log.d("test", "request failed")
         }

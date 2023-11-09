@@ -12,10 +12,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.languagelearning.ui.FlashCardFoodScreen
+import com.example.languagelearning.ui.SelectCategoryScreen
 
 enum class Route {
     LanguageSelection,
-    FlashCard
+    CategorySelection,
+    FlashCard,
+    FlashCardFood
 }
 
 @Composable
@@ -35,6 +39,22 @@ fun LanguageLearningApp(
         }
 
         composable(
+            route = "${Route.CategorySelection.name}/{languageCode}",
+            arguments = listOf(
+                navArgument("languageCode"){
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            SelectCategoryScreen(
+                categoryOptions = DataSource.categoryNames,
+                categoryPhotos = DataSource.categoryPhotos,
+                languageCode = backStackEntry.arguments?.getString("languageCode"),
+                navController
+            )
+        }
+
+        composable(
             route = "${Route.FlashCard.name}/{languageCode}",
             arguments = listOf(
                 navArgument("languageCode"){
@@ -46,6 +66,24 @@ fun LanguageLearningApp(
                 animalNames = DataSource.animalNames,
                 animalPhotos = DataSource.animalPhotos,
                 languageCode = backStackEntry.arguments?.getString("languageCode"),
+                categorySelected = backStackEntry.arguments?.getString("categorySelected"),
+                navController
+            )
+        }
+
+        composable(
+            route = "${Route.FlashCardFood.name}/{languageCode}",
+            arguments = listOf(
+                navArgument("languageCode"){
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            FlashCardFoodScreen(
+                foodNames = DataSource.foodNames,
+                foodPhotos = DataSource.foodPhotos,
+                languageCode = backStackEntry.arguments?.getString("languageCode"),
+                categorySelected = backStackEntry.arguments?.getString("categorySelected"),
                 navController
             )
         }
