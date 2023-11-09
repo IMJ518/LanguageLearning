@@ -1,15 +1,15 @@
 package com.example.languagelearning.api
 
+import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.POST
+import retrofit2.http.Query
+import retrofit2.http.GET
 
 // Data Transfer Object(DTO) - define data structure for API communication
-data class TranslateRequest(val q: String, val source: String, val target: String?)
 data class TranslateResponse(val translatedText: String)
 
 // API Interface (define CRUD methods using GET, POST, PUT, DELETE annotations)
-interface LibreTranslate {
-    @POST("translate")
-    fun translate(@Body request: TranslateRequest): Call<TranslateResponse>
+interface RetrofitService {
+    @GET("get")
+    fun translate(@Query("q") q: String, @Query("langpair", encoded = true) langpair: String): Call<ResponseBody>
 }
