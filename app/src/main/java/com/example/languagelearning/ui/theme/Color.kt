@@ -1,4 +1,4 @@
-package com.example.languagelearning.ui.theme
+package com.example.languagelearning.sampledata.theme
 
 import androidx.compose.ui.graphics.Color
 
