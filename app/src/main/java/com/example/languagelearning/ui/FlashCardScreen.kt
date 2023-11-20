@@ -56,7 +56,6 @@ fun FlashCardScreen(
     animalNames: List<String>,
     animalPhotos: List<Int>,
     languageCode: String?,
-    categorySelected: String?,
     navController: NavHostController
 ) {
     val pageCount = animalNames.size

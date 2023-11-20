@@ -34,7 +34,7 @@ fun LanguageLearningApp(
             SelectLanguageScreen(
                 languageOptions = DataSource.languageCodes,
                 flags = DataSource.flags,
-                navController
+                navController = navController
             )
         }
 
@@ -50,7 +50,7 @@ fun LanguageLearningApp(
                 categoryOptions = DataSource.categoryNames,
                 categoryPhotos = DataSource.categoryPhotos,
                 languageCode = backStackEntry.arguments?.getString("languageCode"),
-                navController
+                navController = navController
             )
         }
 
@@ -66,8 +66,7 @@ fun LanguageLearningApp(
                 animalNames = DataSource.animalNames,
                 animalPhotos = DataSource.animalPhotos,
                 languageCode = backStackEntry.arguments?.getString("languageCode"),
-                categorySelected = backStackEntry.arguments?.getString("categorySelected"),
-                navController
+                navController = navController
             )
         }
 
@@ -83,8 +82,7 @@ fun LanguageLearningApp(
                 foodNames = DataSource.foodNames,
                 foodPhotos = DataSource.foodPhotos,
                 languageCode = backStackEntry.arguments?.getString("languageCode"),
-                categorySelected = backStackEntry.arguments?.getString("categorySelected"),
-                navController
+                navController = navController
             )
         }
     }
