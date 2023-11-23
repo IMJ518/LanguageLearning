@@ -37,16 +37,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+
 import com.example.languagelearning.api.ApiService
-import com.example.languagelearning.ui.components.BtnBack
 import com.example.languagelearning.ui.components.BtnPlay
-import com.google.gson.JsonObject
+import com.example.languagelearning.ui.components.BtnBack
 import okhttp3.ResponseBody
-import org.json.JSONObject
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 
 var translation: String = ""
 
@@ -59,13 +58,12 @@ fun FlashCardScreen(
     navController: NavHostController
 ) {
     val pageCount = animalNames.size
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(pageCount = { pageCount })
 
     /**
      * A pager that scrolls horizontally
      */
     HorizontalPager(
-        pageCount = pageCount,
         state = pagerState,
         key = { animalNames[it] }
     ) { index ->

@@ -6,7 +6,6 @@ import com.example.languagelearning.ui.FlashCardScreen
 
 import androidx.compose.runtime.Composable
 
-import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,9 +22,9 @@ enum class Route {
 }
 
 @Composable
-fun LanguageLearningApp(
-    navController: NavHostController = rememberNavController()
-) {
+fun LanguageLearningApp() {
+    val navController = rememberNavController()
+
     NavHost(
         navController = navController,
         startDestination = Route.LanguageSelection.name,

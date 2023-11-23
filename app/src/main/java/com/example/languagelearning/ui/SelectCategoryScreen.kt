@@ -34,7 +34,6 @@ fun SelectCategoryScreen(
     ) {
         items(categoryOptions.size) {  index ->
             val categorySelected = DataSource.categoryNames[index]
-            val languageSelected = languageCode
 
             Image(
                 painter = painterResource(id = categoryPhotos[index]),
@@ -48,12 +47,12 @@ fun SelectCategoryScreen(
                         onClick = {
                             if (categorySelected == "Animals")
                             {
-                                navController.navigate("FlashCard/${languageSelected}")
+                                navController.navigate("FlashCard/${languageCode}")
                                 Log.d("Category", categorySelected)
                             }
                             else if (categorySelected == "Food")
                             {
-                                navController.navigate("FlashCardFood/${languageSelected}")
+                                navController.navigate("FlashCardFood/${languageCode}")
                                 Log.d("Category", categorySelected)
                             }
                         }

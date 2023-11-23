@@ -39,11 +39,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
 import com.example.languagelearning.api.ApiService
-import com.example.languagelearning.api.TranslateResponse
 import com.example.languagelearning.ui.components.BtnPlay
 import com.example.languagelearning.ui.components.BtnBack
 import okhttp3.ResponseBody
-import org.json.JSONObject
 
 import retrofit2.Call
 import retrofit2.Callback
@@ -60,13 +58,12 @@ fun FlashCardFoodScreen(
     navController: NavHostController
 ) {
     val pageCount = foodNames.size
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(pageCount = { pageCount })
 
     /**
      * A pager that scrolls horizontally
      */
     HorizontalPager(
-        pageCount = pageCount,
         state = pagerState,
         key = { foodNames[it] }
     ) { index ->
