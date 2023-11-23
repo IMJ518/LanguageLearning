@@ -5,10 +5,12 @@ import com.example.languagelearning.ui.SelectLanguageScreen
 import com.example.languagelearning.ui.FlashCardScreen
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.languagelearning.ui.FlashCardFoodScreen
@@ -24,6 +26,7 @@ enum class Route {
 @Composable
 fun LanguageLearningApp() {
     val navController = rememberNavController()
+    val backStackEntry by navController.currentBackStackEntryAsState()
 
     NavHost(
         navController = navController,
@@ -44,11 +47,11 @@ fun LanguageLearningApp() {
                     type = NavType.StringType
                 }
             )
-        ) { backStackEntry ->
+        ) {
             SelectCategoryScreen(
                 categoryOptions = DataSource.categoryNames,
                 categoryPhotos = DataSource.categoryPhotos,
-                languageCode = backStackEntry.arguments?.getString("languageCode"),
+                languageCode = backStackEntry?.arguments?.getString("languageCode"),
                 navController = navController
             )
         }
@@ -60,11 +63,11 @@ fun LanguageLearningApp() {
                     type = NavType.StringType
                 }
             )
-        ) { backStackEntry ->
+        ) {
             FlashCardScreen(
                 animalNames = DataSource.animalNames,
                 animalPhotos = DataSource.animalPhotos,
-                languageCode = backStackEntry.arguments?.getString("languageCode"),
+                languageCode = backStackEntry?.arguments?.getString("languageCode"),
                 navController = navController
             )
         }
@@ -76,11 +79,11 @@ fun LanguageLearningApp() {
                     type = NavType.StringType
                 }
             )
-        ) { backStackEntry ->
+        ) {
             FlashCardFoodScreen(
                 foodNames = DataSource.foodNames,
                 foodPhotos = DataSource.foodPhotos,
-                languageCode = backStackEntry.arguments?.getString("languageCode"),
+                languageCode = backStackEntry?.arguments?.getString("languageCode"),
                 navController = navController
             )
         }
