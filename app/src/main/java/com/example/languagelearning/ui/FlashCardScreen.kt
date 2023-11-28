@@ -39,9 +39,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
 import com.example.languagelearning.api.ApiService
+import com.example.languagelearning.api.TranslateResponse
 import com.example.languagelearning.ui.components.BtnPlay
 import com.example.languagelearning.ui.components.BtnBack
 import okhttp3.ResponseBody
+import org.json.JSONObject
 
 import retrofit2.Call
 import retrofit2.Callback
@@ -149,24 +151,23 @@ fun translateText(text: String, languageCode: String?) {
     translation = ""
 
     // Send asynchronous HTTP request using enqueue() method (for synchronous request, use execute())
-    ApiService.instance.translate(q = text, langpair = "en|$languageCode").enqueue(object : Callback<ResponseBody> {
-        override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+    ApiService.instance.translate(q = text, langpair = "en|$languageCode").enqueue(object : Callback<TranslateResponse>{
+        override fun onResponse(call: Call<TranslateResponse>, response: Response<TranslateResponse>) {
             if (response.isSuccessful) {
-                Log.d("test", response.body()!!.string())
-                // Handle data
-//                val translatedText = response.body()
-//                if (translatedText != null)
-//                {
-//                    translation = translatedText
-//                    Log.d("test", translation) // print the translated text in logcat
-//                }
+                val translatedText = response.body()?.responseData?.translatedText
+
+                if (translatedText != null)
+                {
+                    translation = translatedText
+                    Log.d("translation", translation)
+                }
             } else {
                 // Handle error
                 Log.d("test", "no response $languageCode")
             }
         }
 
-        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+        override fun onFailure(call: Call<TranslateResponse>, t: Throwable) {
             // Handle failure of the request
             Log.d("test", "request failed")
         }
