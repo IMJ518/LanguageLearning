@@ -1,5 +1,7 @@
 package com.example.languagelearning.ui
 
+import android.content.Context
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -37,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.languagelearning.MainActivity
 
 import com.example.languagelearning.api.ApiService
 import com.example.languagelearning.api.TranslateResponse
@@ -47,8 +50,29 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Locale
 
 var foodTranslation: String = ""
+var textToSpeechFood:TextToSpeech? = null
+
+fun textToSpeechFood(context: Context?, languageCode: String?){
+    textToSpeechFood = TextToSpeech(
+        context
+    ){
+        if (it == TextToSpeech.SUCCESS){
+            textToSpeechFood?.let { txtToSpeech ->
+                txtToSpeech.language = Locale.forLanguageTag(languageCode.toString())
+                // speed of reading
+                txtToSpeech.setSpeechRate(1.0f)
+                txtToSpeech.speak(
+                    foodTranslation,
+                    TextToSpeech.QUEUE_FLUSH,
+                    null,
+                    null)
+            }
+        }
+    }
+}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -114,7 +138,11 @@ fun FlashCardFoodScreen(
                             fontWeight = FontWeight.Bold
                         )
                     )
-                    BtnPlay(onClick = { Log.d("test", "clicked") })
+                    BtnPlay(onClick = {
+                        if (languageCode != null) {
+                            textToSpeechFood(MainActivity.appContext, languageCode)
+                        }
+                    })
                 }
             }
         }

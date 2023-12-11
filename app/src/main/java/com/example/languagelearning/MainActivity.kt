@@ -1,6 +1,7 @@
 package com.example.languagelearning
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.drawable.Icon
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -43,5 +44,11 @@ class MainActivity : ComponentActivity() {
                 LanguageLearningApp()
             }
         }
+        appContext = this
+    }
+
+    companion object {
+        var appContext: Context? = null
     }
 }
+

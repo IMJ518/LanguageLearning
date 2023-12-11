@@ -1,6 +1,12 @@
 package com.example.languagelearning.ui
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.speech.tts.TextToSpeech
+import android.speech.tts.TextToSpeech.OnInitListener
 import android.util.Log
+import android.view.ViewGroup
+import androidx.annotation.NonNull
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -10,6 +16,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+//import androidx.compose.foundation.layout.RowScopeInstance.align
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,20 +43,44 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
+import com.example.languagelearning.LanguageLearningApp
+import com.example.languagelearning.MainActivity
 
 import com.example.languagelearning.api.ApiService
 import com.example.languagelearning.api.TranslateResponse
 import com.example.languagelearning.ui.components.BtnPlay
 import com.example.languagelearning.ui.components.BtnBack
-import okhttp3.ResponseBody
-import org.json.JSONObject
 
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Locale
 
 var translation: String = ""
+var textToSpeechAnimals:TextToSpeech? = null
+
+fun textToSpeechAnimals(context: Context?,  languageCode: String){
+    textToSpeechAnimals = TextToSpeech(
+        context
+    ){
+
+        if (it == TextToSpeech.SUCCESS){
+            textToSpeechAnimals?.let { txtToSpeech ->
+                txtToSpeech.language = Locale.forLanguageTag(languageCode)
+                // speed of reading
+                txtToSpeech.setSpeechRate(1.0f)
+                txtToSpeech.speak(
+                    translation,
+                    TextToSpeech.QUEUE_FLUSH,
+                    null,
+                    null)
+            }
+        }
+    }
+}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -116,7 +147,11 @@ fun FlashCardScreen(
                             fontWeight = FontWeight.Bold
                         )
                     )
-                    BtnPlay(onClick = { Log.d("test", "clicked") })
+                    BtnPlay(onClick = {
+                        if (languageCode != null) {
+                            textToSpeechAnimals(MainActivity.appContext, languageCode)
+                        }
+                    })
                 }
             }
         }
@@ -145,7 +180,6 @@ fun FlashCardScreen(
 
     BtnBack(onClick = { navController.navigateUp() })
 }
-
 
 fun translateText(text: String, languageCode: String?) {
     translation = ""

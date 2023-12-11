@@ -1,6 +1,8 @@
 package com.example.languagelearning
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.speech.tts.TextToSpeech
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -47,6 +49,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.languagelearning.ui.FlashCardFoodScreen
 import com.example.languagelearning.ui.SelectCategoryScreen
+import com.example.languagelearning.ui.textToSpeechAnimals
+import com.example.languagelearning.ui.textToSpeechFood
+import com.example.languagelearning.ui.translation
+import java.util.Locale
 
 enum class Route {
     LanguageSelection,
