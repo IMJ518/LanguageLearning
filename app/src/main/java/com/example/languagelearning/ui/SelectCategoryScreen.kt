@@ -73,7 +73,5 @@ fun SelectCategoryScreen(
         }
     }
 
-    BtnBack(onClick = { //navController.navigateUp()
-        
-    })
+    BtnBack(onClick = { navController.navigateUp() })
 }
