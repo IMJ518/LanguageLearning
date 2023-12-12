@@ -51,36 +51,21 @@ import com.example.languagelearning.MainActivity
 
 import com.example.languagelearning.api.ApiService
 import com.example.languagelearning.api.TranslateResponse
+import com.example.languagelearning.data.FlashCard
 import com.example.languagelearning.ui.components.BtnPlay
 import com.example.languagelearning.ui.components.BtnBack
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.Locale
 
+import coil.compose.AsyncImage
+
 var translation: String = ""
 var textToSpeechAnimals:TextToSpeech? = null
-
-fun textToSpeechAnimals(context: Context?,  languageCode: String){
-    textToSpeechAnimals = TextToSpeech(
-        context
-    ){
-
-        if (it == TextToSpeech.SUCCESS){
-            textToSpeechAnimals?.let { txtToSpeech ->
-                txtToSpeech.language = Locale.forLanguageTag(languageCode)
-                // speed of reading
-                txtToSpeech.setSpeechRate(1.0f)
-                txtToSpeech.speak(
-                    translation,
-                    TextToSpeech.QUEUE_FLUSH,
-                    null,
-                    null)
-            }
-        }
-    }
-}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -90,15 +75,41 @@ fun FlashCardScreen(
     languageCode: String?,
     navController: NavHostController
 ) {
-    val pageCount = animalNames.size
+    val animalList: MutableList<String> = mutableListOf()
+    val photoList: MutableList<String> = mutableListOf()
+
+    val db = Firebase.firestore
+    db.collection("flashcards")
+        .whereEqualTo("category", "Animal")
+        .get()
+        .addOnSuccessListener { documents ->
+            for (document in documents) {
+                val cardName = document.data["name"]
+                val cardImage = document.data["image"]
+                animalList.add(cardName.toString())
+                photoList.add(cardImage.toString())
+
+//                Log.d("DBtest", cardName.toString())
+            }
+            Log.d("LionName", animalList[0])
+            Log.d("TigerName", animalList[1])
+            Log.d("LionPhoto", photoList[0])
+            Log.d("TigerPhoto", photoList[1])
+        }
+
+
+
+    val pageCount = animalList.size
     val pagerState = rememberPagerState(pageCount = { pageCount })
+
+    Log.d("Page Count", pageCount.toString())
 
     /**
      * A pager that scrolls horizontally
      */
     HorizontalPager(
         state = pagerState,
-        key = { animalNames[it] }
+        key = { animalList[it] }
     ) { index ->
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -107,7 +118,7 @@ fun FlashCardScreen(
             var expanded by remember { mutableStateOf(false) }
 
             Text(
-                text = animalNames[index],
+                text = animalList[index],
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -117,8 +128,8 @@ fun FlashCardScreen(
                 )
             )
 
-            Image(
-                painter = painterResource(id = animalPhotos[index]),
+            AsyncImage(
+                model = photoList[index],
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -130,10 +141,27 @@ fun FlashCardScreen(
                         expanded = !expanded
                         if (expanded) {
                             Log.d("test", "expanded")
-                            translateText(animalNames[index], languageCode)
+                            translateText(animalList[index], languageCode)
                         }
                     }
             )
+//            Image(
+//                painter = painterResource(id = animalPhotos[index]),
+//                contentDescription = null,
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier
+//                    .requiredSize(350.dp)
+//                    .padding(10.dp)
+//                    .align(Alignment.CenterHorizontally)
+//                    .fillMaxWidth()
+//                    .clickable {
+//                        expanded = !expanded
+//                        if (expanded) {
+//                            Log.d("test", "expanded")
+//                            translateText(animalList[index], languageCode)
+//                        }
+//                    }
+//            )
 
             AnimatedVisibility(expanded) {
                 Column(verticalArrangement = Arrangement.Center,
@@ -207,3 +235,24 @@ fun translateText(text: String, languageCode: String?) {
         }
     })
 }
+
+fun textToSpeechAnimals(context: Context?,  languageCode: String){
+    textToSpeechAnimals = TextToSpeech(
+        context
+    ){
+
+        if (it == TextToSpeech.SUCCESS){
+            textToSpeechAnimals?.let { txtToSpeech ->
+                txtToSpeech.language = Locale.forLanguageTag(languageCode)
+                // speed of reading
+                txtToSpeech.setSpeechRate(1.0f)
+                txtToSpeech.speak(
+                    translation,
+                    TextToSpeech.QUEUE_FLUSH,
+                    null,
+                    null)
+            }
+        }
+    }
+}
+

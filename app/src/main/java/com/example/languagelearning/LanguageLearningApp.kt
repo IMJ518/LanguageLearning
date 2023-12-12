@@ -49,6 +49,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.languagelearning.ui.FlashCardFoodScreen
 import com.example.languagelearning.ui.SelectCategoryScreen
+import com.example.languagelearning.ui.UploadFlashCardForm
 import com.example.languagelearning.ui.textToSpeechAnimals
 import com.example.languagelearning.ui.textToSpeechFood
 import com.example.languagelearning.ui.translation
@@ -58,7 +59,8 @@ enum class Route {
     LanguageSelection,
     CategorySelection,
     FlashCard,
-    FlashCardFood
+    FlashCardFood,
+    UploadFlashCard,
 }
 
 data class BottomNavigationItem(
@@ -87,7 +89,7 @@ fun LanguageLearningApp() {
         ),
         BottomNavigationItem(
             title = "Add Flashcard",
-            link = Route.LanguageSelection.name,
+            link = Route.UploadFlashCard.name,
             selectedIcon = Icons.Filled.AddCircle,
             unselectedIcon = Icons.Outlined.Add
         )
@@ -182,6 +184,12 @@ fun LanguageLearningApp() {
                     foodNames = DataSource.foodNames,
                     foodPhotos = DataSource.foodPhotos,
                     languageCode = backStackEntry?.arguments?.getString("languageCode"),
+                    navController = navController
+                )
+            }
+
+            composable(route = Route.UploadFlashCard.name) {
+                UploadFlashCardForm(
                     navController = navController
                 )
             }

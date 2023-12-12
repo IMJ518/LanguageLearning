@@ -20,8 +20,8 @@ object DataSource {
     )
 
     val animalPhotos = listOf(
-        R.drawable.dog,
-        R.drawable.cat,
+//        R.drawable.dog,
+//        R.drawable.cat,
         R.drawable.lion,
         R.drawable.tiger
     )
