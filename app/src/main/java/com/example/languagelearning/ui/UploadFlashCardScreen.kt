@@ -37,6 +37,7 @@ fun UploadFlashCardForm(
     navController: NavHostController
 ) {
     var name by remember { mutableStateOf("") }
+    var imageUrl by remember { mutableStateOf("") }
     val items = listOf("Animal", "Food")
     var expanded by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableStateOf(0) }
@@ -46,12 +47,6 @@ fun UploadFlashCardForm(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TextField(
-            value = name,
-            onValueChange = { name = it },
-            modifier = Modifier.width(350.dp),
-            label = { Text("Name") }
-        )
         Text(
             text = "Category",
             modifier = Modifier
@@ -62,7 +57,9 @@ fun UploadFlashCardForm(
 
         Box(
             modifier = Modifier
-                .width(350.dp)) {
+                .width(350.dp)
+                .padding(0.dp, 10.dp))
+        {
             Text(
                 items[selectedIndex],
                 modifier = Modifier
@@ -91,15 +88,35 @@ fun UploadFlashCardForm(
             }
         }
 
+        TextField(
+            value = name,
+            onValueChange = { name = it },
+            modifier = Modifier
+                .width(350.dp)
+                .padding(0.dp, 10.dp),
+            label = { Text("Name") }
+        )
+
+        TextField(
+            value = imageUrl,
+            onValueChange = { imageUrl = it },
+            modifier = Modifier
+                .width(350.dp)
+                .padding(0.dp, 10.dp),
+            label = { Text("Image URL") }
+        )
+
         Row(
             modifier = Modifier
-                .padding(0.dp, 15.dp)
+                .padding(0.dp, 10.dp)
                 .width(350.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ){
             Button(
                 onClick = {
-                    AddNewFlashCard(name, selectedCategory)
+                    AddNewFlashCard(name, selectedCategory, imageUrl)
+
+
                     navController.navigateUp()}
             ) {
                 Text("Upload")
@@ -115,10 +132,8 @@ fun UploadFlashCardForm(
     }
 }
 
-fun AddNewFlashCard(name: String, category: String){
+fun AddNewFlashCard(name: String, category: String, image: String){
     val database = Firebase.firestore
-
-    val card = FlashCard(name, category, "")
-
+    val card = FlashCard(name, category, image)
     database.collection("flashcards").add(card)
 }

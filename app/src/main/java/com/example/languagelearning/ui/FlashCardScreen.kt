@@ -71,45 +71,48 @@ var textToSpeechAnimals:TextToSpeech? = null
 @Composable
 fun FlashCardScreen(
     animalNames: List<String>,
-    animalPhotos: List<Int>,
+    animalPhotos: List<String>,
     languageCode: String?,
     navController: NavHostController
 ) {
-    val animalList: MutableList<String> = mutableListOf()
-    val photoList: MutableList<String> = mutableListOf()
-
-    val db = Firebase.firestore
-    db.collection("flashcards")
-        .whereEqualTo("category", "Animal")
-        .get()
-        .addOnSuccessListener { documents ->
-            for (document in documents) {
-                val cardName = document.data["name"]
-                val cardImage = document.data["image"]
-                animalList.add(cardName.toString())
-                photoList.add(cardImage.toString())
-
-//                Log.d("DBtest", cardName.toString())
-            }
-            Log.d("LionName", animalList[0])
-            Log.d("TigerName", animalList[1])
-            Log.d("LionPhoto", photoList[0])
-            Log.d("TigerPhoto", photoList[1])
-        }
 
 
 
-    val pageCount = animalList.size
+//    val animalList: MutableList<String> = mutableListOf()
+//    val photoList: MutableList<String> = mutableListOf()
+//
+//    val db = Firebase.firestore
+//    db.collection("flashcards")
+//        .whereEqualTo("category", "Animal")
+//        .get()
+//        .addOnSuccessListener { documents ->
+//            for (document in documents) {
+//                val cardName = document.data["name"]
+//                val cardImage = document.data["image"]
+//                animalList.add(cardName.toString())
+//                photoList.add(cardImage.toString())
+//
+////                Log.d("DBtest", cardName.toString())
+//            }
+//            Log.d("LionName", animalList[0])
+//            Log.d("TigerName", animalList[1])
+//            Log.d("LionPhoto", photoList[0])
+//            Log.d("TigerPhoto", photoList[1])
+//        }
+
+
+
+    val pageCount = animalNames.size
     val pagerState = rememberPagerState(pageCount = { pageCount })
 
-    Log.d("Page Count", pageCount.toString())
+//    Log.d("Page Count", pageCount.toString())
 
     /**
      * A pager that scrolls horizontally
      */
     HorizontalPager(
         state = pagerState,
-        key = { animalList[it] }
+        key = { animalNames[it] }
     ) { index ->
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -118,7 +121,7 @@ fun FlashCardScreen(
             var expanded by remember { mutableStateOf(false) }
 
             Text(
-                text = animalList[index],
+                text = animalNames[index],
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -129,7 +132,7 @@ fun FlashCardScreen(
             )
 
             AsyncImage(
-                model = photoList[index],
+                model = animalPhotos[index],
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -141,7 +144,7 @@ fun FlashCardScreen(
                         expanded = !expanded
                         if (expanded) {
                             Log.d("test", "expanded")
-                            translateText(animalList[index], languageCode)
+                            translateText(animalNames[index], languageCode)
                         }
                     }
             )

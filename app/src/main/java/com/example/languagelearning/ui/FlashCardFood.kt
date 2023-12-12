@@ -39,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.languagelearning.MainActivity
 
 import com.example.languagelearning.api.ApiService
@@ -55,30 +56,11 @@ import java.util.Locale
 var foodTranslation: String = ""
 var textToSpeechFood:TextToSpeech? = null
 
-fun textToSpeechFood(context: Context?, languageCode: String?){
-    textToSpeechFood = TextToSpeech(
-        context
-    ){
-        if (it == TextToSpeech.SUCCESS){
-            textToSpeechFood?.let { txtToSpeech ->
-                txtToSpeech.language = Locale.forLanguageTag(languageCode.toString())
-                // speed of reading
-                txtToSpeech.setSpeechRate(1.0f)
-                txtToSpeech.speak(
-                    foodTranslation,
-                    TextToSpeech.QUEUE_FLUSH,
-                    null,
-                    null)
-            }
-        }
-    }
-}
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FlashCardFoodScreen(
     foodNames: List<String>,
-    foodPhotos: List<Int>,
+    foodPhotos: List<String>,
     languageCode: String?,
     navController: NavHostController
 ) {
@@ -109,8 +91,8 @@ fun FlashCardFoodScreen(
                 )
             )
 
-            Image(
-                painter = painterResource(id = foodPhotos[index]),
+            AsyncImage(
+                model = foodPhotos[index],
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -121,10 +103,28 @@ fun FlashCardFoodScreen(
                     .clickable {
                         expanded = !expanded
                         if (expanded) {
+                            Log.d("test", "expanded")
                             translateFoodText(foodNames[index], languageCode)
                         }
                     }
             )
+
+//            Image(
+//                painter = painterResource(id = foodPhotos[index]),
+//                contentDescription = null,
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier
+//                    .requiredSize(350.dp)
+//                    .padding(10.dp)
+//                    .align(Alignment.CenterHorizontally)
+//                    .fillMaxWidth()
+//                    .clickable {
+//                        expanded = !expanded
+//                        if (expanded) {
+//                            translateFoodText(foodNames[index], languageCode)
+//                        }
+//                    }
+//            )
 
             AnimatedVisibility(expanded) {
                 Column(verticalArrangement = Arrangement.Center,
@@ -198,4 +198,23 @@ fun translateFoodText(text: String, languageCode: String?) {
             Log.d("test", "request failed")
         }
     })
+}
+
+fun textToSpeechFood(context: Context?, languageCode: String?){
+    textToSpeechFood = TextToSpeech(
+        context
+    ){
+        if (it == TextToSpeech.SUCCESS){
+            textToSpeechFood?.let { txtToSpeech ->
+                txtToSpeech.language = Locale.forLanguageTag(languageCode.toString())
+                // speed of reading
+                txtToSpeech.setSpeechRate(1.0f)
+                txtToSpeech.speak(
+                    foodTranslation,
+                    TextToSpeech.QUEUE_FLUSH,
+                    null,
+                    null)
+            }
+        }
+    }
 }
