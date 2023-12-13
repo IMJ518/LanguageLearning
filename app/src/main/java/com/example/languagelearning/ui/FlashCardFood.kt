@@ -3,6 +3,7 @@ package com.example.languagelearning.ui
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -46,6 +47,7 @@ import com.example.languagelearning.api.ApiService
 import com.example.languagelearning.api.TranslateResponse
 import com.example.languagelearning.ui.components.BtnPlay
 import com.example.languagelearning.ui.components.BtnBack
+import com.example.languagelearning.ui.components.BtnReview
 import okhttp3.ResponseBody
 
 import retrofit2.Call
@@ -138,11 +140,16 @@ fun FlashCardFoodScreen(
                             fontWeight = FontWeight.Bold
                         )
                     )
-                    BtnPlay(onClick = {
-                        if (languageCode != null) {
-                            textToSpeechFood(MainActivity.appContext, languageCode)
-                        }
-                    })
+                    Row {
+                        BtnPlay(onClick = {
+                            if (languageCode != null) {
+                                textToSpeechFood(MainActivity.appContext, languageCode)
+                            }
+                        })
+                        BtnReview(onClick = {
+                            Toast.makeText(MainActivity.appContext, "Added to reviews.", Toast.LENGTH_SHORT).show()
+                        })
+                    }
                 }
             }
         }

@@ -1,15 +1,11 @@
 package com.example.languagelearning.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.speech.tts.TextToSpeech
-import android.speech.tts.TextToSpeech.OnInitListener
 import android.util.Log
-import android.view.ViewGroup
-import androidx.annotation.NonNull
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,25 +33,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.example.languagelearning.LanguageLearningApp
 import com.example.languagelearning.MainActivity
 
 import com.example.languagelearning.api.ApiService
 import com.example.languagelearning.api.TranslateResponse
-import com.example.languagelearning.data.FlashCard
 import com.example.languagelearning.ui.components.BtnPlay
 import com.example.languagelearning.ui.components.BtnBack
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
 
 import retrofit2.Call
 import retrofit2.Callback
@@ -63,9 +53,12 @@ import retrofit2.Response
 import java.util.Locale
 
 import coil.compose.AsyncImage
+import com.example.languagelearning.MainActivity.Companion.appContext
+import com.example.languagelearning.ui.components.BtnReview
 
 var translation: String = ""
 var textToSpeechAnimals:TextToSpeech? = null
+var liked = false
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -178,11 +171,18 @@ fun FlashCardScreen(
                             fontWeight = FontWeight.Bold
                         )
                     )
-                    BtnPlay(onClick = {
-                        if (languageCode != null) {
-                            textToSpeechAnimals(MainActivity.appContext, languageCode)
-                        }
-                    })
+                    Row {
+                        BtnPlay(onClick = {
+                            if (languageCode != null) {
+                                textToSpeechAnimals(MainActivity.appContext, languageCode)
+                            }
+                        })
+                        BtnReview(onClick = {
+                            Toast.makeText(appContext, "Added to reviews.", Toast.LENGTH_SHORT).show()
+                            // Write on the db
+                        })
+                    }
+
                 }
             }
         }
