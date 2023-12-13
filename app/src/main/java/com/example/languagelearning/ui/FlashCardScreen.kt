@@ -54,7 +54,9 @@ import java.util.Locale
 
 import coil.compose.AsyncImage
 import com.example.languagelearning.MainActivity.Companion.appContext
-import com.example.languagelearning.ui.components.BtnReview
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.ktx.firestore
 
 var translation: String = ""
 var textToSpeechAnimals:TextToSpeech? = null
@@ -176,10 +178,6 @@ fun FlashCardScreen(
                             if (languageCode != null) {
                                 textToSpeechAnimals(MainActivity.appContext, languageCode)
                             }
-                        })
-                        BtnReview(onClick = {
-                            Toast.makeText(appContext, "Added to reviews.", Toast.LENGTH_SHORT).show()
-                            // Write on the db
                         })
                     }
 

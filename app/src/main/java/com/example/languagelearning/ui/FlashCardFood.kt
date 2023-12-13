@@ -47,7 +47,6 @@ import com.example.languagelearning.api.ApiService
 import com.example.languagelearning.api.TranslateResponse
 import com.example.languagelearning.ui.components.BtnPlay
 import com.example.languagelearning.ui.components.BtnBack
-import com.example.languagelearning.ui.components.BtnReview
 import okhttp3.ResponseBody
 
 import retrofit2.Call
@@ -145,9 +144,6 @@ fun FlashCardFoodScreen(
                             if (languageCode != null) {
                                 textToSpeechFood(MainActivity.appContext, languageCode)
                             }
-                        })
-                        BtnReview(onClick = {
-                            Toast.makeText(MainActivity.appContext, "Added to reviews.", Toast.LENGTH_SHORT).show()
                         })
                     }
                 }

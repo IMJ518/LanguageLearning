@@ -137,12 +137,6 @@ fun LanguageLearningApp() {
             unselectedIcon = Icons.Outlined.Home
         ),
         BottomNavigationItem(
-            title = "Review",
-            link = Route.LanguageSelection.name,
-            selectedIcon = Icons.Filled.Edit,
-            unselectedIcon = Icons.Outlined.Edit
-        ),
-        BottomNavigationItem(
             title = "Add Flashcard",
             link = Route.UploadFlashCard.name,
             selectedIcon = Icons.Filled.AddCircle,
